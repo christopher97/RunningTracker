@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RunningTracker</string>
+    <string name="previous_runs">Previous Runs</string>
+    <string name="settings">Settings</string>
 </resources>

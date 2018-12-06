@@ -40,16 +40,49 @@ public class RunningTrackerContentProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         SQLiteDatabase sqlDB = myDB.getWritableDatabase();
         int rowsDeleted = 0;
+        String id = "";
         switch (uriType) {
-            case RUNS:
-                break;
             case RUNS_ID:
-                break;
-            case RUN_DETAILS:
+                // delete by ID or ID and selection
+                id = uri.getLastPathSegment();
+                if (TextUtils.isEmpty(selection)) {
+                    rowsDeleted = sqlDB.delete(MyContract.RUNS_TABLE,
+                            MyContract.RUN_COLUMN_ID + " = " + id,
+                            null);
+                } else {
+                    rowsDeleted = sqlDB.delete(MyContract.RUNS_TABLE,
+                            MyContract.RUN_COLUMN_ID + " = " + id
+                                        + " and " + selection,
+                            selectionArgs);
+                }
                 break;
             case RUN_DETAILS_ID:
+                // delete by ID or ID and selection
+                id = uri.getLastPathSegment();
+                if (TextUtils.isEmpty(selection)) {
+                    rowsDeleted = sqlDB.delete(MyContract.RUN_DETAILS_TABLE,
+                            MyContract.RD_COLUMN_ID + " = " + id,
+                            null);
+                } else {
+                    rowsDeleted = sqlDB.delete(MyContract.RUN_DETAILS_TABLE,
+                            MyContract.RD_COLUMN_ID + " = " + id
+                                    + " and " + selection,
+                            selectionArgs);
+                }
                 break;
             case RUN_DETAILS_RUN_ID:
+                // delete by ID or ID and selection
+                id = uri.getLastPathSegment();
+                if (TextUtils.isEmpty(selection)) {
+                    rowsDeleted = sqlDB.delete(MyContract.RUN_DETAILS_TABLE,
+                            MyContract.RD_COLUMN_RUN_ID + " = " + id,
+                            null);
+                } else {
+                    rowsDeleted = sqlDB.delete(MyContract.RUN_DETAILS_TABLE,
+                            MyContract.RD_COLUMN_RUN_ID + " = " + id
+                                    + " and " + selection,
+                            selectionArgs);
+                }
                 break;
         }
         getContext().getContentResolver().notifyChange(uri, null);

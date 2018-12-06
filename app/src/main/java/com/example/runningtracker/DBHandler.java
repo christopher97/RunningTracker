@@ -51,7 +51,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 MyContract.RD_COLUMN_RUN_ID + " INTEGER, "
                 + MyContract.RD_COLUMN_LAT + " DOUBLE, " +
                 MyContract.RD_COLUMN_LON + " DOUBLE, "
-                + MyContract.RD_COLUMN_TIME + " INTEGER" + ")";
+                + MyContract.RD_COLUMN_TIME + " INTEGER," +
+                " FOREIGN KEY (" + MyContract.RD_COLUMN_RUN_ID + ") REFERENCES "
+                + MyContract.RUNS_TABLE + "(" + MyContract.RUN_COLUMN_ID + ")" +
+                "ON DELETE CASCADE ON UPDATE CASCADE)";
 
         db.execSQL(CREATE_RUN_DETAILS_TABLE);
     }
@@ -104,7 +107,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String[] projection = MyContract.runProjection;
 
         String selection = "";
-        Uri uri = Uri.parse(MyContract.RUN_DETAILS_RUN_ID_URI.toString() + id);
+        Uri uri = Uri.parse(MyContract.RUN_DETAILS_RUN_ID_URI.toString() + "//" + id);
         Cursor cursor = myCR.query(uri,
                 projection, selection, null, null);
 
@@ -122,5 +125,14 @@ public class DBHandler extends SQLiteOpenHelper {
             return rd;
         }
         return null;
+    }
+
+    public boolean deleteRun(int id) {
+        String selection = "";
+        Uri newURI = Uri.parse(MyContract.RUN_URI.toString() + "//" + id);
+        int rowsDeleted = myCR.delete(newURI, selection, null);
+
+        // return boolean based on the result of update
+        return (rowsDeleted > 0);
     }
 }

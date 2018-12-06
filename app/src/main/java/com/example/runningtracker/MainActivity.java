@@ -1,13 +1,18 @@
 package com.example.runningtracker;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -23,6 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
         configureDrawerLayout();
         configureToolbar();
+
+        checkLocationPermission();
+    }
+
+    public void onStartButtonPressed(View view) {
+        Intent i = new Intent(MainActivity.this, CountdownActivity.class);
+        startActivity(i);
     }
 
     private void configureDrawerLayout() {
@@ -92,5 +104,19 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void checkLocationPermission() {
+        boolean fineLocPermission =
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if (!fineLocPermission) {
+            Log.v("LOCATION PERMISSION", "ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1
+            );
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.runningtracker.model;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 public class Run {
@@ -17,6 +16,9 @@ public class Run {
 
     public Run(Timestamp start) {
         this.start = start;
+        this.distance = 0;
+        this.duration = 0;
+        this.pace = 0;
     }
 
     public Run(int id, int duration, double pace, Timestamp start, Timestamp end, int distance) {

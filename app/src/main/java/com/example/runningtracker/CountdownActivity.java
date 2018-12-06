@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 public class CountdownActivity extends AppCompatActivity {
 
+    private CountDownTimer countDownTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +22,7 @@ public class CountdownActivity extends AppCompatActivity {
     private void countdown() {
         final TextView number = findViewById(R.id.numberText);
         int counter = 3;
-        new CountDownTimer(counter * 1000, 1000) {
+        countDownTimer = new CountDownTimer(counter * 1000, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -35,5 +37,12 @@ public class CountdownActivity extends AppCompatActivity {
                 finish();
             }
         }.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        countDownTimer.cancel();
+        this.finish();
     }
 }

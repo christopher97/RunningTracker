@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HistoryActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/monthList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:fadeScrollbars="true"
+        android:scrollbars="vertical"
+        android:scrollIndicators="end"
+        android:scrollbarSize="3dp"
+        android:scrollbarThumbVertical="@color/dividerColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/totalKilometers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/fira_sans_bold"
+        android:text="@string/total_km_int"
+        android:textColor="@color/primaryText"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/total_kilometers"
+        android:textColor="@color/primaryText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalKilometers" />
+
+    <TextView
+        android:id="@+id/totalRuns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/fira_sans_bold"
+        android:text="@string/total_run_int"
+        android:textColor="@color/primaryText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/total_runs"
+        android:textColor="@color/primaryText"
+        app:layout_constraintEnd_toEndOf="@+id/totalRuns"
+        app:layout_constraintStart_toStartOf="@+id/totalRuns"
+        app:layout_constraintTop_toBottomOf="@+id/totalRuns" />
+
+    <TextView
+        android:id="@+id/avgDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/fira_sans_bold"
+        android:text="@string/avg_distance_int"
+        android:textColor="@color/primaryText"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/paceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/avg_distance"
+        android:textColor="@color/primaryText"
+        app:layout_constraintEnd_toEndOf="@+id/avgDistance"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toStartOf="@+id/avgDistance"
+        app:layout_constraintTop_toBottomOf="@+id/avgDistance" />
+
+    <TextView
+        android:id="@+id/avgPace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="60dp"
+        android:fontFamily="@font/fira_sans_bold"
+        android:text="@string/avg_pace_int"
+        android:textColor="@color/primaryText"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/avg_pace"
+        android:textColor="@color/primaryText"
+        app:layout_constraintEnd_toEndOf="@+id/avgPace"
+        app:layout_constraintStart_toStartOf="@+id/avgPace"
+        app:layout_constraintTop_toBottomOf="@+id/avgPace" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/primaryText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paceTextView" />
+
+</android.support.constraint.ConstraintLayout>

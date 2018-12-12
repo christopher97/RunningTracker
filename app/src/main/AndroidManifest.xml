@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.runningtracker">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,13 +31,20 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".CountdownActivity" />
-        <activity android:name=".RunningActivity" />
+        <activity android:name=".CountdownActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".RunningActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".RunningBoundService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".HistoryActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

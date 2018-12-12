@@ -8,4 +8,19 @@
     <string name="play_button">Play Button</string>
     <string name="stop_button">Stop Button</string>
     <string name="pause_button">Pause Button</string>
+    <string name="target_text">Target</string>
+    <string name="distance_text">distance</string>
+    <string name="duration_text">duration</string>
+    <string name="pace_text">pace</string>
+    <string name="total_kilometers">Total Kilometers</string>
+    <string name="total_run_int">run</string>
+    <string name="total_km_int">km</string>
+    <string name="avg_distance_int">dist</string>
+    <string name="avg_pace_int">pace</string>
+    <string name="avg_distance">Avg. Distance</string>
+    <string name="total_runs">Total Runs</string>
+    <string name="avg_pace">Avg. Pace</string>
+    <string name="month">month</string>
+    <string name="date">Date</string>
+    <string name="day">day</string>
 </resources>

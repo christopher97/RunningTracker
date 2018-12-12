@@ -7,23 +7,33 @@ public class RunDetails {
     private double lat; // latitude
     private double lon; // longitude
     private int time;   // seconds elapsed since start of run
+    private int pace; // pace at current time
 
     public RunDetails() {
     }
 
-    public RunDetails(int runID, double lat, double lon, int time) {
+    public RunDetails(double lat, double lon, int time, int pace) {
+        this.lat = lat;
+        this.lon = lon;
+        this.time = time;
+        this.pace = pace;
+    }
+
+    public RunDetails(int runID, double lat, double lon, int time, int pace) {
         this.runID = runID;
         this.lat = lat;
         this.lon = lon;
         this.time = time;
+        this.pace = pace;
     }
 
-    public RunDetails(int id, int runID, double lat, double lon, int time) {
+    public RunDetails(int id, int runID, double lat, double lon, int time, int pace) {
         this.id = id;
         this.runID = runID;
         this.lat = lat;
         this.lon = lon;
         this.time = time;
+        this.pace = pace;
     }
 
     public int getId() {
@@ -65,4 +75,8 @@ public class RunDetails {
     public void setTime(int time) {
         this.time = time;
     }
+
+    public double getPace() { return pace; }
+
+    public void setPace(int pace) { this.pace = pace; }
 }

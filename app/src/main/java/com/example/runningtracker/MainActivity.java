@@ -45,10 +45,17 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        Toast.makeText(MainActivity.this,
-                                menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        int id = menuItem.getItemId();
+
+                        switch (id) {
+                            case R.id.nav_history:
+                                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                                startActivity(intent);
+                                break;
+                            default:
+                                break;
+                        }
+
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
@@ -110,11 +117,23 @@ public class MainActivity extends AppCompatActivity {
         boolean fineLocPermission =
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
+        boolean coarseLocPermission =
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
         if (!fineLocPermission) {
             Log.v("LOCATION PERMISSION", "ATTEMPT REQUEST");
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1
+            );
+        }
+
+        if (!coarseLocPermission) {
+            Log.v("LOCATION PERMISSION", "ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     1
             );
         }

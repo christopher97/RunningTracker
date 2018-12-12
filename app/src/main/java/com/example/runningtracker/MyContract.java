@@ -4,7 +4,7 @@ import android.net.Uri;
 
 public class MyContract {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "runDB.db";
 
     public static final String AUTHORITY =
@@ -48,12 +48,14 @@ public class MyContract {
     public static final String RD_COLUMN_LAT = "lat";
     public static final String RD_COLUMN_LON = "lon";
     public static final String RD_COLUMN_TIME = "time";
+    public static final String RD_COLUMN_PACE = "pace";
 
     public static final int RD_COL_ID_NO = 0;
     public static final int RD_COL_RUN_ID_NO = 1;
     public static final int RD_COL_LAT_NO = 2;
     public static final int RD_COL_LON_NO = 3;
     public static final int RD_COL_TIME_NO = 4;
+    public static final int RD_COL_PACE_NO = 5;
 
     public static final String[] runDetailsProjection = {
             RD_COLUMN_ID,

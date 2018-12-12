@@ -25,6 +25,7 @@ public class RunningTrackerContentProvider extends ContentProvider {
     static {
         sURIMatcher.addURI(MyContract.AUTHORITY, MyContract.RUNS_TABLE, RUNS);
         sURIMatcher.addURI(MyContract.AUTHORITY, MyContract.RUNS_TABLE + "/#", RUNS_ID);
+        sURIMatcher.addURI(MyContract.AUTHORITY, MyContract.RUN_DETAILS_TABLE, RUN_DETAILS);
         sURIMatcher.addURI(MyContract.AUTHORITY, MyContract.RUN_DETAILS_TABLE + "/#", RUN_DETAILS_ID);
         sURIMatcher.addURI(MyContract.AUTHORITY, MyContract.RUNS_TABLE + "/" +
                 MyContract.RUN_DETAILS_TABLE + "/#", RUN_DETAILS_RUN_ID);
@@ -108,7 +109,7 @@ public class RunningTrackerContentProvider extends ContentProvider {
 
                 getContext().getContentResolver().notifyChange(uri, null);
                 return Uri.parse(MyContract.RUNS_TABLE + "/" + id);
-            case RUN_DETAILS_ID:
+            case RUN_DETAILS:
                 id = sqlDB.insert(MyContract.RUN_DETAILS_TABLE,
                         null, values);
 
@@ -132,16 +133,23 @@ public class RunningTrackerContentProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
             case RUNS:
+                queryBuilder.setTables(MyContract.RUNS_TABLE);
                 break;
             case RUNS_ID:
                 queryBuilder.appendWhere(MyContract.RUN_COLUMN_ID + "="
                     + uri.getLastPathSegment());
+                queryBuilder.setTables(MyContract.RUNS_TABLE);
+                break;
             case RUN_DETAILS_ID:
                 queryBuilder.appendWhere(MyContract.RD_COLUMN_ID + "="
                     + uri.getLastPathSegment());
+                queryBuilder.setTables(MyContract.RUN_DETAILS_TABLE);
+                break;
             case RUN_DETAILS_RUN_ID:
                 queryBuilder.appendWhere(MyContract.RD_COLUMN_RUN_ID + "="
                     + uri.getLastPathSegment());
+                queryBuilder.setTables(MyContract.RUN_DETAILS_TABLE);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }

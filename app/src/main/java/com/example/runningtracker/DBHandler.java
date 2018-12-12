@@ -11,7 +11,10 @@ import android.net.Uri;
 import com.example.runningtracker.model.Run;
 import com.example.runningtracker.model.RunDetails;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + MyContract.RUN_COLUMN_END + " INTEGER, " +
                 MyContract.RUN_COLUMN_DISTANCE + " INTEGER, "
                 + MyContract.RUN_COLUMN_DURATION + " INTEGER, " +
-                MyContract.RUN_COLUMN_PACE + " DOUBLE" + ")";
+                MyContract.RUN_COLUMN_PACE + " INTEGER" + ")";
 
         db.execSQL(CREATE_RUNS_TABLE);
     }
@@ -52,9 +55,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 + MyContract.RD_COLUMN_LAT + " DOUBLE, " +
                 MyContract.RD_COLUMN_LON + " DOUBLE, "
                 + MyContract.RD_COLUMN_TIME + " INTEGER," +
-                " FOREIGN KEY (" + MyContract.RD_COLUMN_RUN_ID + ") REFERENCES "
-                + MyContract.RUNS_TABLE + "(" + MyContract.RUN_COLUMN_ID + ")" +
-                "ON DELETE CASCADE ON UPDATE CASCADE)";
+                MyContract.RD_COLUMN_PACE + " INTEGER,"
+                + " FOREIGN KEY (" + MyContract.RD_COLUMN_RUN_ID + ") REFERENCES " +
+                MyContract.RUNS_TABLE + "(" + MyContract.RUN_COLUMN_ID + ")"
+                + "ON DELETE CASCADE ON UPDATE CASCADE)";
 
         db.execSQL(CREATE_RUN_DETAILS_TABLE);
     }
@@ -66,7 +70,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addRun(Run run) {
+    public int addRun(Run run) {
         ContentValues values = new ContentValues();
         values.put(MyContract.RUN_COLUMN_START, run.getStart().getTime());
         values.put(MyContract.RUN_COLUMN_END, run.getEnd().getTime());
@@ -74,7 +78,23 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(MyContract.RUN_COLUMN_DISTANCE, run.getDistance());
         values.put(MyContract.RUN_COLUMN_PACE, run.getPace());
 
-        myCR.insert(MyContract.RUN_URI, values);
+        Uri uri = myCR.insert(MyContract.RUN_URI, values);
+
+        return Integer.valueOf(uri.getLastPathSegment());
+    }
+
+    public void addRunDetails(List<RunDetails> rdList, int runID) {
+        for (int i=0; i<rdList.size(); i++) {
+            RunDetails rd = rdList.get(i);
+            ContentValues values = new ContentValues();
+            values.put(MyContract.RD_COLUMN_RUN_ID, runID);
+            values.put(MyContract.RD_COLUMN_LAT, rd.getLat());
+            values.put(MyContract.RD_COLUMN_LON, rd.getLon());
+            values.put(MyContract.RD_COLUMN_TIME, rd.getTime());
+            values.put(MyContract.RD_COLUMN_PACE, rd.getPace());
+
+            myCR.insert(MyContract.RUN_DETAILS_URI, values);
+        }
     }
 
     public List<Run> fetchAllRuns() {
@@ -91,12 +111,15 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 // create new run instance
                 Run run = new Run();
+
                 run.setId(Integer.parseInt(cursor.getString(MyContract.RUN_COL_ID_NO)));
-                run.setStart(Timestamp.valueOf(cursor.getString(MyContract.RUN_COL_START_NO)));
-                run.setEnd(Timestamp.valueOf(cursor.getString(MyContract.RUN_COL_END_NO)));
+                run.setStart(new Timestamp(cursor.getLong(MyContract.RUN_COL_START_NO)));
+                run.setEnd(new Timestamp(cursor.getLong(MyContract.RUN_COL_END_NO)));
                 run.setDistance(Integer.parseInt(cursor.getString(MyContract.RUN_COL_DISTANCE_NO)));
                 run.setDuration(Integer.parseInt(cursor.getString(MyContract.RUN_COL_DURATION_NO)));
                 run.setPace(Integer.parseInt(cursor.getString(MyContract.RUN_COL_PACE_NO)));
+
+                runs.add(run);
             } while (cursor.moveToNext());
             cursor.close();
         }

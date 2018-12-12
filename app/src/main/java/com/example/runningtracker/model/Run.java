@@ -9,7 +9,7 @@ public class Run {
     private Timestamp end;
     private int distance;
     private int duration;
-    private double pace;
+    private int pace;
 
     public Run() {
     }
@@ -21,7 +21,7 @@ public class Run {
         this.pace = 0;
     }
 
-    public Run(int id, int duration, double pace, Timestamp start, Timestamp end, int distance) {
+    public Run(int id, int duration, int pace, Timestamp start, Timestamp end, int distance) {
         this.id = id;
         this.duration = duration;
         this.pace = pace;
@@ -50,7 +50,7 @@ public class Run {
         return pace;
     }
 
-    public void setPace(double pace) {
+    public void setPace(int pace) {
         this.pace = pace;
     }
 

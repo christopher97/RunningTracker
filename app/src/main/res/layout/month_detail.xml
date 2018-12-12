@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/monthDetailView"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/dividerColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/monthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/fira_sans_bold"
+        android:text="@string/month"
+        android:textColor="@color/primaryText"
+        app:layout_constraintBottom_toBottomOf="@+id/monthDetailView"
+        app:layout_constraintStart_toStartOf="@+id/monthDetailView"
+        app:layout_constraintTop_toTopOf="@+id/monthDetailView" />
+
+    <TextView
+        android:id="@+id/paceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/avg_pace_int"
+        android:textColor="@color/primaryText"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/monthDetailView"
+        app:layout_constraintEnd_toEndOf="@+id/monthDetailView"
+        app:layout_constraintTop_toTopOf="@+id/monthDetailView" />
+
+    <TextView
+        android:id="@+id/distanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/total_km_int"
+        android:textColor="@color/primaryText"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/monthDetailView"
+        app:layout_constraintEnd_toStartOf="@+id/paceTextView"
+        app:layout_constraintTop_toTopOf="@+id/monthDetailView" />
+
+    <TextView
+        android:id="@+id/runTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/total_run_int"
+        android:textColor="@color/primaryText"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/monthDetailView"
+        app:layout_constraintEnd_toStartOf="@+id/distanceTextView"
+        app:layout_constraintTop_toTopOf="@+id/monthDetailView" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/runRecycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthDetailView" />
+
+</android.support.constraint.ConstraintLayout>

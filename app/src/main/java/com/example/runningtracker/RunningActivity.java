@@ -77,12 +77,9 @@ public class RunningActivity extends AppCompatActivity {
         super.onPause();
         Log.i(TAG, "On Pause");
 
-        // unbind service to prevent leak
         isBound = false;
 
-        // TODO
-        // Kill everything when this activity is left
-
+        // unbind service to prevent leak
         if (myConnection != null)
             unbindService(myConnection);
         if (broadcastReceiver != null) {
@@ -96,6 +93,7 @@ public class RunningActivity extends AppCompatActivity {
         discardAlertBuilder.show();
     }
 
+    // set the filter and register the broadcast receiver
     private void setBroadcastReceiver() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -110,19 +108,15 @@ public class RunningActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver, filter);
     }
 
+    // updates the duration, distance, and pace textView values
     private void updateUI(Bundle bundle) {
         int duration = bundle.getInt(Config.duration);
         int distance = bundle.getInt(Config.distance);
         int pace = bundle.getInt(Config.pace);
 
-        String durationString =
-                duration/60 + ":" + (duration % 60 < 10 ? "0"+(duration%60):(duration%60));
-
-        String distanceString =
-                (distance/1000) + "." + (distance%1000/100) + (distance%100/10);
-
-        String paceString =
-                (pace/60) + "\'" + (pace%60) + "\"";
+        String durationString = Config.getDurationString(duration);
+        String distanceString = Config.getDistanceString(distance);
+        String paceString = Config.getPaceString(pace);
 
         durationText.setText(durationString);
         distanceText.setText(distanceString);
@@ -149,6 +143,7 @@ public class RunningActivity extends AppCompatActivity {
         }
     };
 
+    // handle pause button click
     public void onPauseButtonPressed(View view) {
         runningService.pauseRun();
 
@@ -157,6 +152,7 @@ public class RunningActivity extends AppCompatActivity {
         pauseButton.setVisibility(View.GONE);
     }
 
+    // handle play button click
     public void onPlayButtonPressed(View view) {
         runningService.continueRun();
 
@@ -165,11 +161,17 @@ public class RunningActivity extends AppCompatActivity {
         pauseButton.setVisibility(View.VISIBLE);
     }
 
+    // handles stop button click
     public void onStopButtonPressed(View view) {
-        runningService.stopRun();
-        finish();
+        if (!runningService.hasMoved()) {
+            discardAlertBuilder.show();
+        } else {
+            runningService.stopRun();
+            finish();
+        }
     }
 
+    // dialog when user is about to discard run
     private void createAlertDialog() {
         discardAlertBuilder = new AlertDialog.Builder(this);
 

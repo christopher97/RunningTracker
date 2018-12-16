@@ -1,5 +1,7 @@
 package com.example.runningtracker;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.runningtracker.model.Month;
+import com.example.runningtracker.model.Run;
 
 import java.util.ArrayList;
 
@@ -61,7 +64,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MonthViewHol
     public void onBindViewHolder(@NonNull MonthViewHolder holder, int position) {
 
         // we customize our row (ViewHolder) here
-        Month month = monthList.get(position);
+        final Month month = monthList.get(position);
 
         String runString = month.getTotalRun() + " run(s)";
         String distString = month.getTotalDistance() + " km";
@@ -72,6 +75,20 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MonthViewHol
         holder.paceTextView.setText(month.getPace());
 
         adapter = new RunAdapter(month.getRuns());
+
+        final Context mContext = holder.itemView.getContext();
+        adapter.setOnClick(new RunAdapter.OnItemClicked() {
+            @Override
+            public void onItemClick(int position) {
+                // when a run is clicked, go the detail of that run
+                Run run = month.getRuns().get(position);
+
+                Intent intent = new Intent(mContext, RunDetailActivity.class);
+                intent.putExtra("run", run);
+                mContext.startActivity(intent);
+            }
+        });
+
         holder.runRecycler.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

@@ -1,15 +1,12 @@
 package com.example.runningtracker;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.example.runningtracker.model.Run;
@@ -17,8 +14,6 @@ import com.example.runningtracker.model.RunDetails;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
-import static java.lang.Math.*;
 
 public class Running implements LocationListener {
 
@@ -30,13 +25,11 @@ public class Running implements LocationListener {
         STOPPED
     }
 
-    private Context mContext;
-
-    private LocationManager locationManager;
-
-    private Handler runHandler = new Handler();
-
     private RunningState runningState;
+
+    private Context mContext;
+    private LocationManager locationManager;
+    private Handler runHandler = new Handler();
 
     private Run run;
     private ArrayList<RunDetails> rdList;
@@ -45,17 +38,13 @@ public class Running implements LocationListener {
     private int distance;
     private int pace;
 
-    private double currLatitude;
-    private double currLongitude;
-
-    private boolean firstCall;
+    private Location currLocation;
 
     public Running(Context context) {
         mContext = context;
 
         run = new Run();
         runningState = RunningState.STOPPED;
-        firstCall = true;
 
         duration = distance = 0;
         pace = 0;
@@ -63,6 +52,7 @@ public class Running implements LocationListener {
         setLocationListener();
     }
 
+    // user starts run
     public void startRun() {
         // instantiate new Run object, will later be used to store into DB
         Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -76,28 +66,33 @@ public class Running implements LocationListener {
         updateDuration();
     }
 
+    // user stops run
     public void stopRun() {
         locationManager.removeUpdates(this);
         runningState = RunningState.STOPPED;
 
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        run.setEnd(now);
-        run.setPace(pace);
-        run.setDuration(duration);
-        run.setDistance(distance);
+        if (!rdList.isEmpty()) {
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            run.setEnd(now);
+            run.setPace(pace);
+            run.setDuration(duration);
+            run.setDistance(distance);
 
-        // save Run and RunDetails ArrayList to database
-        DBHandler dbHandler = new DBHandler(mContext, null, null,
-                MyContract.DATABASE_VERSION);
+            // save Run and RunDetails ArrayList to database
+            DBHandler dbHandler = new DBHandler(mContext, null, null,
+                    MyContract.DATABASE_VERSION);
 
-        int id = dbHandler.addRun(run);
-        dbHandler.addRunDetails(rdList, id);
+            int id = dbHandler.addRun(run);
+            dbHandler.addRunDetails(rdList, id);
+        }
     }
 
+    // user pauses run
     public void pauseRun() {
         runningState = RunningState.PAUSED;
     }
 
+    // user continues run
     public void continueRun() {
         runningState = RunningState.RUNNING;
         updateDuration();
@@ -115,21 +110,23 @@ public class Running implements LocationListener {
         Log.i(TAG, "Latitude = " + newLatitude);
         Log.i(TAG, "Longitude = " + newLongitude);
 
-        if (runningState == RunningState.RUNNING && !firstCall) {
-            // manhattan distance
-            distance += Config.calculateDistance(currLatitude, currLongitude, newLatitude, newLongitude);
+        // if user is currently running and it is not the first coordinate
+        // calculate the distance and pace
+        if (runningState == RunningState.RUNNING && (currLocation != null)) {
+            // Haversine Formula
+            distance += Config.calculateDistance(currLocation.getLatitude(), currLocation.getLongitude()
+                    , newLatitude, newLongitude);
 
             // average pace in seconds/km
             pace = (int)((duration * 1.0) / (distance * 1.0/1000));
 
             // add run details
-            RunDetails rd = new RunDetails(currLatitude, currLongitude, duration, pace);
+            RunDetails rd = new RunDetails(newLatitude, newLongitude, duration);
             rdList.add(rd);
         }
 
-        firstCall = false;
-        currLatitude = newLatitude;
-        currLongitude = newLongitude;
+        // replace the previous coordinate with current coordinate
+        currLocation = location;
     }
 
     @Override
@@ -151,20 +148,7 @@ public class Running implements LocationListener {
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         try {
-            if (ActivityCompat.checkSelfPermission(mContext,
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return false;
-            }
-
+            // retrieve update every determined time and distance interval
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     Config.timeInterval,
                     Config.distInterval,
@@ -177,6 +161,7 @@ public class Running implements LocationListener {
         return true;
     }
 
+    // runs to update duration
     private Runnable durationHandler = new Runnable() {
         @Override
         public void run() {
@@ -184,6 +169,7 @@ public class Running implements LocationListener {
         }
     };
 
+    // logic to update duration
     private void updateDuration() {
         if (runningState == RunningState.RUNNING) {
             // send broadcast to RunningActivity
@@ -194,6 +180,7 @@ public class Running implements LocationListener {
         }
     }
 
+    // send progress to RunningActivity
     private void broadcastProgress() {
         Intent intent = new Intent();
         intent.setAction(Config.progressFilter);
@@ -202,10 +189,15 @@ public class Running implements LocationListener {
         Log.i(TAG, Config.distance + " = " + distance);
         Log.i(TAG, Config.pace + " = " + pace);
 
+        // put data
         intent.putExtra(Config.duration, duration);
         intent.putExtra(Config.distance, distance);
         intent.putExtra(Config.pace, pace);
 
         mContext.sendBroadcast(intent);
+    }
+
+    public boolean hasMoved() {
+        return (!rdList.isEmpty());
     }
 }

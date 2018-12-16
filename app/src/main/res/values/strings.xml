@@ -23,4 +23,5 @@
     <string name="month">month</string>
     <string name="date">Date</string>
     <string name="day">day</string>
+    <string name="text_kilometers">Kilometers</string>
 </resources>

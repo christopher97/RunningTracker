@@ -4,15 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.example.runningtracker.model.Month;
 import com.example.runningtracker.model.Run;
 
-import java.sql.Array;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -56,6 +52,7 @@ public class HistoryActivity extends AppCompatActivity {
         setRecyclerData();
     }
 
+    // set data for the recycler view
     private void setRecyclerData() {
         if (!runList.isEmpty()) {
 
@@ -83,6 +80,7 @@ public class HistoryActivity extends AppCompatActivity {
         }
     }
 
+    // count the averages
     private void setAverages() {
         TextView totalKilometersText = findViewById(R.id.totalKilometers);
         TextView totalRunsText = findViewById(R.id.totalRuns);

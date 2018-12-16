@@ -11,10 +11,7 @@ import android.net.Uri;
 import com.example.runningtracker.model.Run;
 import com.example.runningtracker.model.RunDetails;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +52,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + MyContract.RD_COLUMN_LAT + " DOUBLE, " +
                 MyContract.RD_COLUMN_LON + " DOUBLE, "
                 + MyContract.RD_COLUMN_TIME + " INTEGER," +
-                MyContract.RD_COLUMN_PACE + " INTEGER,"
-                + " FOREIGN KEY (" + MyContract.RD_COLUMN_RUN_ID + ") REFERENCES " +
+                " FOREIGN KEY (" + MyContract.RD_COLUMN_RUN_ID + ") REFERENCES " +
                 MyContract.RUNS_TABLE + "(" + MyContract.RUN_COLUMN_ID + ")"
                 + "ON DELETE CASCADE ON UPDATE CASCADE)";
 
@@ -91,7 +87,6 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(MyContract.RD_COLUMN_LAT, rd.getLat());
             values.put(MyContract.RD_COLUMN_LON, rd.getLon());
             values.put(MyContract.RD_COLUMN_TIME, rd.getTime());
-            values.put(MyContract.RD_COLUMN_PACE, rd.getPace());
 
             myCR.insert(MyContract.RUN_DETAILS_URI, values);
         }
@@ -126,28 +121,32 @@ public class DBHandler extends SQLiteOpenHelper {
         return runs;
     }
 
-    public RunDetails fetchRunDetails(int id) {
-        String[] projection = MyContract.runProjection;
+    public List<RunDetails> fetchRunDetails(int id) {
+        String[] projection = MyContract.runDetailsProjection;
 
         String selection = "";
         Uri uri = Uri.parse(MyContract.RUN_DETAILS_RUN_ID_URI.toString() + "//" + id);
         Cursor cursor = myCR.query(uri,
                 projection, selection, null, null);
 
+        List<RunDetails> rdList = new ArrayList<RunDetails>();
         if ((cursor != null) && (cursor.getCount() > 0)) {
             cursor.moveToFirst();
 
-            RunDetails rd = new RunDetails();
-            rd.setId(Integer.parseInt(cursor.getString(MyContract.RD_COL_ID_NO)));
-            rd.setRunID(Integer.parseInt(cursor.getString(MyContract.RD_COL_RUN_ID_NO)));
-            rd.setLat(Integer.parseInt(cursor.getString(MyContract.RD_COL_LAT_NO)));
-            rd.setLon(Integer.parseInt(cursor.getString(MyContract.RD_COL_LON_NO)));
-            rd.setTime(Integer.parseInt(cursor.getString(MyContract.RD_COL_TIME_NO)));
+            do {
+                RunDetails rd = new RunDetails();
 
+                rd.setId(Integer.parseInt(cursor.getString(MyContract.RD_COL_ID_NO)));
+                rd.setRunID(Integer.parseInt(cursor.getString(MyContract.RD_COL_RUN_ID_NO)));
+                rd.setLat(Double.parseDouble(cursor.getString(MyContract.RD_COL_LAT_NO)));
+                rd.setLon(Double.parseDouble(cursor.getString(MyContract.RD_COL_LON_NO)));
+                rd.setTime(Integer.parseInt(cursor.getString(MyContract.RD_COL_TIME_NO)));
+
+                rdList.add(rd);
+            } while (cursor.moveToNext());
             cursor.close();
-            return rd;
         }
-        return null;
+        return rdList;
     }
 
     public boolean deleteRun(int id) {

@@ -1,25 +1,12 @@
 package com.example.runningtracker;
 
-import android.Manifest;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.runningtracker.model.Run;
-
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.sql.Date;
 
 public class RunningBoundService extends Service {
 
@@ -75,5 +62,9 @@ public class RunningBoundService extends Service {
 
     public void continueRun() {
         running.pauseRun();
+    }
+
+    public boolean hasMoved() {
+        return running.hasMoved();
     }
 }

@@ -112,19 +112,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/distanceText" />
 
-    <TextView
-        android:id="@+id/targetText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/fira_sans_medium_italic"
-        android:text="@string/target_text"
-        android:textColor="@color/primaryText"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/durationText" />
-
 </android.support.constraint.ConstraintLayout>

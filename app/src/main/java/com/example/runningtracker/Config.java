@@ -22,6 +22,7 @@ public class Config {
     public static final int earthRadius = 6378137;
 
     public static final String[] dayOfWeek = {
+            "EMPTY",
             "SUNDAY",
             "MONDAY",
             "TUESDAY",
@@ -30,6 +31,36 @@ public class Config {
             "FRIDAY",
             "SATURDAY"
     };
+
+    public static final String[] monthName = {
+            "JANUARY",
+            "FEBRUARY",
+            "MARCH",
+            "APRIL",
+            "MAY",
+            "JUNE",
+            "JULY",
+            "AUGUST",
+            "SEPTEMBER",
+            "OCTOBER",
+            "NOVEMBER",
+            "DECEMBER"
+    };
+
+    public static final String getDistanceString(int dist) {
+        String res = (dist/1000) + "." + (dist%1000/100) + (dist%100/10);
+        return res;
+    }
+
+    public static final String getPaceString(int p) {
+        String res = (p/60) + "\'" + (p%60) + "\"";
+        return res;
+    }
+
+    public static final String getDurationString(int dur) {
+        String res = dur/60 + ":" + (dur % 60 < 10 ? "0"+(dur%60):(dur%60));
+        return res;
+    }
 
     /**
      * calculate distance in metres between two coordinates

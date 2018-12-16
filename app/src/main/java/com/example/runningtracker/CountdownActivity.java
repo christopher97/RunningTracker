@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 public class CountdownActivity extends AppCompatActivity {
@@ -19,6 +18,7 @@ public class CountdownActivity extends AppCompatActivity {
         countdown();
     }
 
+    // countdown from 3 to 1
     private void countdown() {
         final TextView number = findViewById(R.id.numberText);
         int counter = 3;
@@ -39,6 +39,7 @@ public class CountdownActivity extends AppCompatActivity {
         }.start();
     }
 
+    // if back button is pressed, cancel the countdown
     @Override
     public void onBackPressed() {
         super.onBackPressed();

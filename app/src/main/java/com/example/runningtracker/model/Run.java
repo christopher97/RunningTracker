@@ -1,8 +1,12 @@
 package com.example.runningtracker.model;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.sql.Timestamp;
 
-public class Run {
+public class Run implements Parcelable {
 
     private int id;
     private Timestamp start;
@@ -12,6 +16,17 @@ public class Run {
     private int pace;
 
     public Run() {
+    }
+
+    public Run(Parcel parcel) {
+        Bundle bundle = parcel.readBundle();
+
+        this.id = bundle.getInt("id");
+        this.start = new Timestamp(bundle.getLong("start"));
+        this.end = new Timestamp(bundle.getLong("end"));
+        this.distance = bundle.getInt("distance");
+        this.duration = bundle.getInt("duration");
+        this.pace = bundle.getInt("pace");
     }
 
     public Run(Timestamp start) {
@@ -46,7 +61,7 @@ public class Run {
         this.duration = duration;
     }
 
-    public double getPace() {
+    public int getPace() {
         return pace;
     }
 
@@ -77,4 +92,30 @@ public class Run {
     public void setDistance(int distance) {
         this.distance = distance;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        bundle.putLong("start", start.getTime());
+        bundle.putLong("end", end.getTime());
+        bundle.putInt("distance", distance);
+        bundle.putInt("duration", duration);
+        bundle.putInt("pace", pace);
+
+        parcel.writeBundle(bundle);
+    }
+
+    public static final Creator<Run> CREATOR = new Creator<Run>() {
+        @Override
+        public Run[] newArray(int i) { return new Run[i]; }
+
+        @Override
+        public Run createFromParcel(Parcel parcel) { return new Run(parcel); }
+    };
 }
